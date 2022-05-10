@@ -51,6 +51,16 @@ class PublicStream
 
     public function whenTweets(string | array $twitterUserIds, callable $whenTweets): self
     {
+        if (is_array($twitterUserIds) && count($twitterUserIds) > 1) {
+            array_reduce(
+                $twitterUserIds,
+                fn($rule, $uid) => last($twitterUserIds) === $uid ? $rule->from($uid) : $rule->from($uid)->or(),
+                $this->rule
+            );
+        } else {
+            $this->rule->from($twitterUserIds);
+        }
+        
         $this->rule->from($twitterUserIds);
         $this->onTweet = $whenTweets;
 
