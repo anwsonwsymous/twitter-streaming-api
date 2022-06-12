@@ -54,7 +54,7 @@ class PublicStream
         if (is_array($twitterUserIds) && count($twitterUserIds) > 1) {
             array_reduce(
                 $twitterUserIds,
-                fn($rule, $uid) => last($twitterUserIds) === $uid ? $rule->from($uid) : $rule->from($uid)->or(),
+                fn($rule, $uid) => end($twitterUserIds) === $uid ? $rule->from($uid) : $rule->from($uid)->or(),
                 $this->rule
             );
         } else {
